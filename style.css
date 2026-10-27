@@ -1,0 +1,319 @@
+/* Базовые переменные для цветовой палитры */
+:root {
+    --bg-color: #f4f7f6;
+    --text-main: #333333;
+    --text-muted: #666666;
+    --accent-blue: #2563eb;
+    --white: #ffffff;
+    --border-color: #e5e7eb;
+}
+
+/* Сброс отступов */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    line-height: 1.6;
+    padding: 0 20px;
+}
+
+/* Шапка-баннер (Header Banner) — фон robert.jpg на первой половине страницы */
+header {
+    position: relative;
+    max-width: 1100px;
+    margin: 40px auto;
+    min-height: 62vh;
+    padding: 60px 40px;
+    border-radius: 12px;
+    overflow: hidden;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(rgba(17, 24, 39, 0.5), rgba(17, 24, 39, 0.78)),
+                url('img/robert.jpg') center/cover no-repeat;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+header p:first-of-type {
+    color: rgba(255, 255, 255, 0.85);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+header h1 {
+    font-size: 3rem;
+    color: var(--white);
+    margin-bottom: 20px;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.55);
+}
+
+header p {
+    margin-bottom: 15px;
+    color: rgba(255, 255, 255, 0.92);
+    max-width: 720px;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.55);
+}
+
+header a {
+    display: inline-block;
+    margin-top: 10px;
+    color: var(--white);
+    text-decoration: none;
+    font-weight: 600;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.6);
+    padding-bottom: 2px;
+    transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+header a:hover {
+    color: #dbeafe;
+    border-color: #dbeafe;
+}
+
+/* Кнопки озвучки о проекте */
+.narration-controls {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.btn-voice {
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 8px;
+    border: none;
+    background-color: #3b82f6;
+    color: var(--white);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.btn-voice:hover {
+    transform: translateY(-1px);
+}
+
+.btn-voice.is-playing {
+    background-color: #10b981;
+}
+
+.btn-stop {
+    background-color: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.btn-stop:hover {
+    background-color: rgba(255, 255, 255, 0.28);
+}
+
+/* Основной контент (Main) */
+main {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+section {
+    background-color: var(--white);
+    padding: 35px 40px;
+    margin-bottom: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+h2 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 10px;
+    color: #111827;
+}
+
+h3 {
+    font-size: 1.3rem;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    color: #1f2937;
+}
+
+article p {
+    margin-bottom: 10px;
+}
+
+/* Списки */
+ul, ol {
+    margin-left: 20px;
+    margin-bottom: 15px;
+}
+
+li {
+    margin-bottom: 12px;
+    color: var(--text-main);
+}
+
+/* Оформление таблицы (Dataset Schema) */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+th {
+    background-color: #f8fafc;
+    font-weight: 600;
+    color: #374151;
+}
+
+/* Теги кода */
+code {
+    background-color: #f1f5f9;
+    padding: 3px 6px;
+    border-radius: 4px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    color: #ef4444;
+    font-size: 0.9rem;
+}
+
+/* Контейнеры для графиков Chart.js */
+.chart-container {
+    position: relative;
+    height: 400px; /* Обязательное условие для корректного рендера графиков Chart.js */
+    width: 100%;
+    margin-top: 20px;
+    padding-top: 15px;
+}
+
+/* Блок-схема (Flowchart) о сайте */
+.flowchart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 25px;
+}
+
+.flow-node {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    max-width: 640px;
+    background-color: #f8fafc;
+    border: 1px solid var(--border-color);
+    border-left: 4px solid var(--accent-blue);
+    border-radius: 10px;
+    padding: 16px 20px;
+    text-align: left;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.flow-node:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.15);
+}
+
+.flow-step {
+    flex: 0 0 36px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--accent-blue);
+    color: var(--white);
+    border-radius: 50%;
+    font-weight: 700;
+}
+
+.flow-node strong {
+    display: block;
+    color: #111827;
+}
+
+.flow-node small {
+    color: var(--text-muted);
+}
+
+.flow-connector {
+    width: 2px;
+    height: 28px;
+    background-color: var(--accent-blue);
+    position: relative;
+}
+
+.flow-connector::after {
+    content: "";
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 7px solid var(--accent-blue);
+}
+
+/* Анимация появления секций (Intersection Observer) */
+.fade-in-section {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    will-change: opacity, visibility;
+}
+
+.fade-in-section.is-visible {
+    opacity: 1;
+    transform: none;
+}
+
+/* Подвал (Footer) */
+footer {
+    max-width: 900px;
+    margin: 40px auto;
+    text-align: center;
+    padding: 20px;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    border-top: 1px solid #d1d5db;
+}
+
+/* Адаптивность для мобильных телефонов */
+@media (max-width: 768px) {
+    body {
+        padding: 0 10px;
+    }
+
+    header, section {
+        padding: 25px 20px;
+    }
+
+    header {
+        min-height: 55vh;
+    }
+
+    header h1 {
+        font-size: 2rem;
+    }
+    
+    .chart-container {
+        height: 300px; /* Уменьшаем высоту графиков на смартфонах */
+    }
+}

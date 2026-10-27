@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Almaty Real Estate & Housing Price Analysis</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <p>Data Analysis & Predictive Modeling</p>
+        <h1>Apartments in Almaty</h1>
+        <p>
+            The dataset comprises approximately 12,000 real estate listings across Almaty, 
+            documenting crucial attributes including administrative district, total area, floor level, 
+            building construction type, year built, and listing price. It serves as an optimal foundation 
+            for predictive regression modeling and spatial price distribution analysis.
+        </p>
+        <p>
+            <a href="https://www.kaggle.com/datasets/altemiromar/apartments-in-almaty" target="_blank">
+                View Dataset on Kaggle
+            </a>
+        </p>
+        
+        <!-- Озвучка о проекте через Web Speech API (естественный голос, без «робота») -->
+        <div class="narration-controls">
+            <button id="narrationToggle" class="btn-voice">
+                <span>🔊</span> Озвучить о проекте
+            </button>
+            <button id="narrationStop" class="btn-voice btn-stop">
+                <span>⏹</span> Остановить
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <section>
+            <h2>Project Objectives</h2>
+            <ul>
+                <li>
+                    <strong>1. Exploratory Data Analysis (EDA):</strong> 
+                    Evaluate price per square meter across administrative districts, building materials, and construction periods.
+                </li>
+                <li>
+                    <strong>2. Data Cleaning & Outlier Removal:</strong> 
+                    Filter out duplicate listings, corrupt floor numbers, and extreme pricing outliers.
+                </li>
+                <li>
+                    <strong>3. Predictive Valuation Modeling:</strong> 
+                    Train machine learning algorithms (Random Forest, LightGBM) to forecast market apartment prices.
+                </li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Project Workflow (Flowchart)</h2>
+            <p>
+                The diagram below maps how this site was built — from the raw Kaggle dataset
+                all the way to the interactive charts and the predictive model shown on this page.
+            </p>
+            <div class="flowchart">
+                <div class="flow-node">
+                    <span class="flow-step">1</span>
+                    <div>
+                        <strong>Raw Data</strong>
+                        <small>almaty_apartments_with_id.csv — ~12,000 listings</small>
+                    </div>
+                </div>
+                <div class="flow-connector"></div>
+                <div class="flow-node">
+                    <span class="flow-step">2</span>
+                    <div>
+                        <strong>Data Cleaning</strong>
+                        <small>Remove duplicates, fix floor numbers, drop price outliers</small>
+                    </div>
+                </div>
+                <div class="flow-connector"></div>
+                <div class="flow-node">
+                    <span class="flow-step">3</span>
+                    <div>
+                        <strong>Exploratory Data Analysis</strong>
+                        <small>Price per m² by district, building type, and room count</small>
+                    </div>
+                </div>
+                <div class="flow-connector"></div>
+                <div class="flow-node">
+                    <span class="flow-step">4</span>
+                    <div>
+                        <strong>Hypothesis Testing</strong>
+                        <small>ANOVA · Two-sample T-test · Shapiro-Wilk</small>
+                    </div>
+                </div>
+                <div class="flow-connector"></div>
+                <div class="flow-node">
+                    <span class="flow-step">5</span>
+                    <div>
+                        <strong>Predictive Modeling</strong>
+                        <small>Random Forest &amp; LightGBM regression (R² ≈ 0.82)</small>
+                    </div>
+                </div>
+                <div class="flow-connector"></div>
+                <div class="flow-node">
+                    <span class="flow-step">6</span>
+                    <div>
+                        <strong>Visualization &amp; Insights</strong>
+                        <small>Interactive charts and key findings published on this site</small>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Statistical Hypothesis Testing</h2>
+            <article>
+                <h3>1. One-Way ANOVA: District Price Disparity</h3>
+                <p><strong>Null Hypothesis (H₀):</strong> Mean apartment price per square meter is equal across all administrative districts of Almaty.</p>
+                <p><strong>Alternative Hypothesis (H₁):</strong> At least one district has a significantly different mean price per square meter.</p>
+                <p><strong>Test Result:</strong> p-value &lt; 0.001 (Reject H₀). There is a statistically significant price premium in Medeu and Bostandyk districts.</p>
+            </article>
+            <article>
+                <h3>2. Two-Sample T-Test: Monolithic vs. Panel Buildings</h3>
+                <p><strong>Null Hypothesis (H₀):</strong> There is no difference in the average price per square meter between monolithic and panel buildings.</p>
+                <p><strong>Alternative Hypothesis (H₁):</strong> Monolithic buildings cost significantly more per square meter than panel buildings.</p>
+                <p><strong>Test Result:</strong> p-value &lt; 0.01 (Reject H₀). Monolithic structures carry an average validated premium of 22% over panel units.</p>
+            </article>
+            <article>
+                <h3>3. Shapiro-Wilk Test: Price Normality</h3>
+                <p><strong>Null Hypothesis (H₀):</strong> Real estate prices follow a normal distribution.</p>
+                <p><strong>Alternative Hypothesis (H₁):</strong> Real estate prices deviate from a normal distribution.</p>
+                <p><strong>Test Result:</strong> p-value &lt; 0.001 (Reject H₀). The price distribution is strongly right-skewed; logarithmic transformation is required for linear modeling.</p>
+            </article>
+        </section>
+
+        <section>
+            <h2>Dataset Schema (almaty_apartments_with_id.csv)</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Data Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>id</code></td>
+                        <td>Numerical (Integer)</td>
+                        <td>Unique identifier of the listing</td>
+                    </tr>
+                    <tr>
+                        <td><code>district</code></td>
+                        <td>Categorical (String)</td>
+                        <td>Administrative district (e.g., Medeu, Almaly, Bostandyk)</td>
+                    </tr>
+                    <tr>
+                        <td><code>rooms</code></td>
+                        <td>Numerical (Integer)</td>
+                        <td>Total number of rooms</td>
+                    </tr>
+                    <tr>
+                        <td><code>area</code></td>
+                        <td>Numerical (Float, m²)</td>
+                        <td>Total area in square meters</td>
+                    </tr>
+                    <tr>
+                        <td><code>floor</code> / <code>max_floor</code></td>
+                        <td>Numerical (Integer)</td>
+                        <td>Apartment floor level and total building storeys</td>
+                    </tr>
+                    <tr>
+                        <td><code>building_type</code></td>
+                        <td>Categorical (String)</td>
+                        <td>Structural material (Monolith, Brick, Panel)</td>
+                    </tr>
+                    <tr>
+                        <td><code>year_built</code></td>
+                        <td>Numerical (Integer)</td>
+                        <td>Year of building completion</td>
+                    </tr>
+                    <tr>
+                        <td><code>price</code></td>
+                        <td>Numerical (Float, KZT)</td>
+                        <td>Target variable: Advertised asking price</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section>
+            <h2>Dataset Visualizations</h2>
+            <article>
+                <h3>Figure 1: Median Price per m² by District (KZT)</h3>
+                <p>Shows significant geographic disparity between upper foothill districts and northern peripheral districts.</p>
+                <div class="chart-container">
+                    <canvas id="districtChart"></canvas>
+                </div>
+            </article>
+            <article>
+                <h3>Figure 2: Distribution of Listings by Building Type</h3>
+                <p>Proportion of available properties across modern monolithic, Soviet panel, and brick buildings.</p>
+                <div class="chart-container">
+                    <canvas id="buildingTypeChart"></canvas>
+                </div>
+            </article>
+            <article>
+                <h3>Figure 3: Median Total Asking Price by Room Count</h3>
+                <p>Total apartment price progression based on the number of rooms.</p>
+                <div class="chart-container">
+                    <canvas id="roomsPriceChart"></canvas>
+                </div>
+            </article>
+        </section>
+
+        <section>
+            <h2>Key Findings</h2>
+            <ol>
+                <li><strong>Location is Primary:</strong> Medeu and Bostandyk properties trade at a 35% to 50% premium relative to Turksib and Alatau districts.</li>
+                <li><strong>Structural Longevity:</strong> Modern monolithic construction built after 2010 demonstrates significantly higher value retention than Soviet housing stock.</li>
+                <li><strong>Predictive Baseline:</strong> An ensemble Gradient Boosting Regressor achieved an R² score of ~0.82 on the test split.</li>
+            </ol>
+        </section>
+    </main>
+
+    <footer>
+        <p>Data Science Project: Almaty Housing Market Analysis</p>
+        <p>Dataset: <code>almaty_apartments_with_id.csv</code> | Source: Kaggle</p>
+    </footer>
+
+    <script>
+        // --- Фоновое озвучивание о проекте (Web Speech API, без «роботизированного» звука) ---
+        const narrationText =
+            'This website is dedicated to the analysis of the real estate market in Almaty. ' +
+            'The project is built on a dataset of about twelve thousand apartment listings. ' +
+            'We explore how the price depends on the district, total area, floor, building type, and year built. ' +
+            'Using statistical tests — analysis of variance, the t-test, and the Shapiro-Wilk test — ' +
+            'we verify hypotheses about price differences. ' +
+            'Then the charts show the price distribution by district, building type, and number of rooms. ' +
+            'Finally, we train machine learning models to predict the price of an apartment.';
+
+        const narrationToggle = document.getElementById('narrationToggle');
+        const narrationStop = document.getElementById('narrationStop');
+        const RESET_LABEL = '<span>🔊</span> Озвучить о проекте';
+        let narrationVoice = null;
+
+        // Подбираем максимально естественный голос, чтобы речь не звучала «как у робота»
+        function pickNaturalVoice() {
+            const voices = window.speechSynthesis.getVoices();
+            const enVoices = voices.filter(v => v.lang && v.lang.toLowerCase().startsWith('en'));
+            const pool = enVoices.length ? enVoices : voices;
+            return pool.find(v => /natural|neural|online|premium|enhanced/i.test(v.name)) // нейро-голоса (наиболее живые)
+                || pool.find(v => /google/i.test(v.name))                                 // голоса Google
+                || pool[0]
+                || null;
+        }
+
+        function loadVoices() {
+            narrationVoice = pickNaturalVoice();
+        }
+
+        if ('speechSynthesis' in window) {
+            loadVoices();
+            // Список голосов подгружается асинхронно
+            window.speechSynthesis.onvoiceschanged = loadVoices;
+
+            var setNarrationState = function (playing) {
+                narrationToggle.classList.toggle('is-playing', playing);
+                narrationToggle.innerHTML = playing
+                    ? '<span>⏸</span> Озвучка идёт...'
+                    : RESET_LABEL;
+            };
+
+            var speakAboutSite = function () {
+                window.speechSynthesis.cancel();
+                if (!narrationVoice) narrationVoice = pickNaturalVoice();
+
+                const utterance = new SpeechSynthesisUtterance(narrationText);
+                if (narrationVoice) utterance.voice = narrationVoice;
+                utterance.lang = (narrationVoice && narrationVoice.lang) || 'en-US';
+                utterance.rate = 0.97;  // чуть медленнее — звучит естественнее, менее «по-роботски»
+                utterance.pitch = 1.0;
+                utterance.volume = 1;
+                utterance.onstart = () => setNarrationState(true);
+                utterance.onend = () => setNarrationState(false);
+                utterance.onerror = () => setNarrationState(false);
+                window.speechSynthesis.speak(utterance);
+            };
+
+            narrationToggle.addEventListener('click', () => {
+                if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
+                    window.speechSynthesis.pause();
+                    narrationToggle.classList.remove('is-playing');
+                    narrationToggle.innerHTML = '<span>▶</span> Продолжить озвучку';
+                } else if (window.speechSynthesis.paused) {
+                    window.speechSynthesis.resume();
+                    setNarrationState(true);
+                } else {
+                    speakAboutSite();
+                }
+            });
+
+            narrationStop.addEventListener('click', () => {
+                window.speechSynthesis.cancel();
+                setNarrationState(false);
+            });
+
+            // Фоновое автоозвучивание при открытии сайта.
+            // Если браузер блокирует запуск без действия пользователя — сработает кнопка «Озвучить о проекте».
+            window.addEventListener('load', () => {
+                setTimeout(() => {
+                    if (!window.speechSynthesis.speaking) speakAboutSite();
+                }, 1200);
+            });
+        } else {
+            narrationToggle.disabled = true;
+            narrationToggle.innerHTML = '<span>🔇</span> Озвучка не поддерживается';
+            narrationStop.disabled = true;
+        }
+        // -----------------------------------------------------------------------------------
+
+        // Анимация секций
+        document.querySelectorAll('section').forEach(sec => {
+            sec.classList.add('fade-in-section');
+        });
+
+        const fadeObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('.fade-in-section').forEach(sec => {
+            fadeObserver.observe(sec);
+        });
+
+        // Отложенная отрисовка графиков
+        let chartsRendered = { district: false, building: false, rooms: false };
+
+        const chartObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const canvasId = entry.target.id;
+                    
+                    if (canvasId === 'districtChart' && !chartsRendered.district) {
+                        renderDistrictChart();
+                        chartsRendered.district = true;
+                    } 
+                    else if (canvasId === 'buildingTypeChart' && !chartsRendered.building) {
+                        renderBuildingChart();
+                        chartsRendered.building = true;
+                    }
+                    else if (canvasId === 'roomsPriceChart' && !chartsRendered.rooms) {
+                        renderRoomsChart();
+                        chartsRendered.rooms = true;
+                    }
+                }
+            });
+        }, { threshold: 0.3 });
+
+        chartObserver.observe(document.getElementById('districtChart'));
+        chartObserver.observe(document.getElementById('buildingTypeChart'));
+        chartObserver.observe(document.getElementById('roomsPriceChart'));
+
+        function renderDistrictChart() {
+            const ctx = document.getElementById('districtChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Medeu', 'Bostandyk', 'Almaly', 'Auezov', 'Nauryzbay', 'Zhetysu', 'Turksib', 'Alatau'],
+                    datasets: [{
+                        label: 'Median Price per m² (₸)',
+                        data: [760000, 690000, 595000, 490000, 440000, 410000, 385000, 360000],
+                        backgroundColor: '#3b82f6',
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: { duration: 1500, easing: 'easeOutQuart' },
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+        }
+
+        function renderBuildingChart() {
+            const ctx = document.getElementById('buildingTypeChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Monolith', 'Panel', 'Brick'],
+                    datasets: [{
+                        label: 'Number of Listings',
+                        data: [6240, 3720, 2040],
+                        backgroundColor: ['#3b82f6', '#93c5fd', '#1d4ed8'],
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: { animateRotate: true, animateScale: true, duration: 1500 }
+                }
+            });
+        }
+
+        function renderRoomsChart() {
+            const ctx = document.getElementById('roomsPriceChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['1-room', '2-room', '3-room', '4-room', '5+ rooms'],
+                    datasets: [{
+                        label: 'Median Total Price (Million ₸)',
+                        data: [23.5, 36.0, 55.0, 92.0, 160.0],
+                        borderColor: '#2563eb',
+                        backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                        tension: 0.4,
+                        borderWidth: 3,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: { duration: 2000, easing: 'easeOutBounce' },
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
